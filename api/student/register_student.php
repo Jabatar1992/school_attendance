@@ -4,23 +4,21 @@ $method = "POST";
 $cache  = "no-cache";
 include "../head.php";
 
-if (isset($_POST['first_name'], $_POST['admission_number'], $_POST['admission_number'], $_POST['last_name']))))) {
+if (isset($_POST['first_name'], $_POST['last_name'], $_POST['admission_number'])) {
 
     $first_name       = cleanme(trim($_POST['first_name']));
     $last_name        = cleanme(trim($_POST['last_name']));
-                      = cleanme(trim($_POST['admission_number'])) 
-                    
-    $class_id         = isset($_POST['class_id']) 
-                        ? cleanme(trim($_POST['class_id'])) 
-                        : null;
+    $admission_number = cleanme(trim($_POST['admission_number']));
 
-    // ======================
-    // VALIDATION SECTION
-    // ======================
+    $class_id = isset($_POST['class_id'])
+                ? intval($_POST['class_id'])
+                : null;
 
-    if (input_is_invalid($first_name) || input_is_invalid($last_name)) {
+    // VALIDATION
 
-        respondBadRequest("First name and Last name are required.");
+    if (input_is_invalid($first_name) || input_is_invalid($last_name) || input_is_invalid($admission_number)) {
+
+        respondBadRequest("First name, Last name and Admission number are required.");
 
     } else if (strlen($first_name) < 2) {
 
@@ -36,29 +34,23 @@ if (isset($_POST['first_name'], $_POST['admission_number'], $_POST['admission_nu
 
     } else {
 
-        // ======================
         // CHECK IF ADMISSION NUMBER EXISTS
-        // ======================
 
-        if (!is_null($admission_number)) {
+        $checkStudent = $connect->prepare(
+            "SELECT id FROM students WHERE admission_number = ?"
+        );
 
-            $checkStudent = $connect->prepare(
-                "SELECT id FROM students WHERE admission_number = ?"
-            );
+        $checkStudent->bind_param("s", $admission_number);
+        $checkStudent->execute();
+        $result = $checkStudent->get_result();
 
-            $checkStudent->bind_param("s", $admission_number);
-            $checkStudent->execute();
-            $result = $checkStudent->get_result();
+        if ($result->num_rows > 0) {
 
-            if ($result->num_rows > 0) {
+            respondBadRequest("Student with this admission number already exists.");
 
-                respondBadRequest("Student with this admission number already exists.");
-            }
         }
 
-        // ======================
         // INSERT STUDENT
-        // ======================
 
         $insertStudent = $connect->prepare("
             INSERT INTO students (first_name, last_name, admission_number, class_id)
@@ -79,7 +71,6 @@ if (isset($_POST['first_name'], $_POST['admission_number'], $_POST['admission_nu
 
             $student_id = $connect->insert_id;
 
-            // Fetch inserted student
             $getStudent = $connect->prepare("
                 SELECT id, first_name, last_name, admission_number, class_id
                 FROM students
