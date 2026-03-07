@@ -2,7 +2,7 @@
 
 $method = "POST";
 $cache  = "no-cache";
-include "../head.php";
+include "../../head.php";
 
 if (isset($_POST['first_name'], $_POST['last_name'], $_POST['admission_number'])) {
 

@@ -2,7 +2,7 @@
 
 $method = "POST";
 $cache  = "no-cache";
-include "../head.php";
+include "../../head.php";
 
 // Required POST fields
 if (isset($_POST['student_id'], $_POST['class_id'], $_POST['attendance_date'], $_POST['status'])) {
