@@ -4,21 +4,17 @@ $method = "POST";
 $cache  = "no-cache";
 include "../head.php";
 
-if (isset($_POST['student_id'])) {
+if (isset($_POST['admission_number'])) {
 
-    $student_id = cleanme(trim($_POST['student_id']));
+    $admission_number = cleanme(trim($_POST['admission_number']));
 
     // ======================
     // VALIDATION SECTION
     // ======================
 
-    if (input_is_invalid($student_id)) {
+    if (input_is_invalid($admission_number)) {
 
-        respondBadRequest("Student ID is required.");
-
-    } else if (!is_numeric($student_id)) {
-
-        respondBadRequest("Student ID must be a number.");
+        respondBadRequest("Admission number is required.");
 
     } else {
 
@@ -29,10 +25,10 @@ if (isset($_POST['student_id'])) {
         $getStudent = $connect->prepare("
             SELECT id, first_name, last_name, admission_number, class_id
             FROM students
-            WHERE id = ?
+            WHERE admission_number = ?
         ");
 
-        $getStudent->bind_param("i", $student_id);
+        $getStudent->bind_param("s", $admission_number);
         $getStudent->execute();
         $result = $getStudent->get_result();
 
@@ -43,13 +39,13 @@ if (isset($_POST['student_id'])) {
 
         } else {
 
-            respondBadRequest("No student found with the given ID.");
+            respondBadRequest("No student found with the given admission number.");
         }
     }
 
 } else {
 
-    respondBadRequest("Invalid request. Required fields missing.");
+    respondBadRequest("Invalid request. Admission number is required.");
 }
 
 ?>
