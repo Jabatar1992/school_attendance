@@ -1,36 +1,64 @@
 <?php
+
+$method = "POST";
+$cache  = "no-cache";
 include "../head.php";
 
-// Example admin key (you should store securely in DB or env)
-define('ADMIN_KEY', 'supersecretadmin123');
+// Required POST field
+if (isset($_POST['attendance_id'])) {
 
-if (isset($_POST['student_id'], $_POST['date'], $_POST['admin_key'])) {
+    $attendance_id = cleanme(trim($_POST['attendance_id']));
 
-    $student_id = cleanme($_POST['student_id']);
-    $date       = cleanme($_POST['date']);
-    $admin_key  = cleanme($_POST['admin_key']);
-
-    // Check admin authorization
-    if ($admin_key !== ADMIN_KEY) {
-        respondBadRequest("Unauthorized: Admin access required");
-        exit;
-    }
-
-    // Delete attendance
-    $stmt = $conn->prepare("DELETE FROM attendance WHERE student_id=? AND date=?");
-    $stmt->bind_param("is", $student_id, $date);
-
-    if ($stmt->execute()) {
-        if ($stmt->affected_rows > 0) {
-            respondOK("Attendance record deleted successfully");
-        } else {
-            respondBadRequest("No attendance record found for this student on this date");
-        }
+    // ======================
+    // VALIDATION
+    // ======================
+    if (input_is_invalid($attendance_id)) {
+        respondBadRequest("Attendance ID is required.");
+    } else if (!is_numeric($attendance_id)) {
+        respondBadRequest("Attendance ID must be a number.");
     } else {
-        respondServerError("Error deleting attendance record");
+
+        // ======================
+        // CHECK IF ATTENDANCE EXISTS
+        // ======================
+        $checkAttendance = $connect->prepare("
+            SELECT id FROM attendances
+            WHERE id = ?
+        ");
+        $checkAttendance->bind_param("i", $attendance_id);
+        $checkAttendance->execute();
+        $result = $checkAttendance->get_result();
+
+        if ($result->num_rows == 0) {
+            respondBadRequest("Attendance record not found.");
+        } else {
+
+            // ======================
+            // DELETE ATTENDANCE
+            // ======================
+            $deleteAttendance = $connect->prepare("
+                DELETE FROM attendances
+                WHERE id = ?
+            ");
+            $deleteAttendance->bind_param("i", $attendance_id);
+            $deleteAttendance->execute();
+
+            if ($deleteAttendance->affected_rows > 0) {
+
+                respondOK([], "Attendance deleted successfully.");
+
+            } else {
+
+                respondBadRequest("Failed to delete attendance.");
+
+            }
+        }
     }
 
 } else {
-    respondBadRequest("Missing required parameters");
+
+    respondBadRequest("Invalid request. Attendance ID is required.");
+
 }
+
 ?>
