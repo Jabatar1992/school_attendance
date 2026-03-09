@@ -24,7 +24,7 @@ if(isset($_POST['user_id']) && isset($_POST['password'])){
  }
 }else{
    respondBadRequest("Invalid request. User ID and password are required.");
-}  ////
+}  
  
 
 
