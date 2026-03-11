@@ -8,9 +8,9 @@ if (isset($_POST['class_id'])) {
 
     $class_id = cleanme(trim($_POST['class_id']));
 
-    // ======================
+    
     // VALIDATION SECTION
-    // ======================
+   
 
     if (input_is_invalid($class_id)) {
 
@@ -22,9 +22,9 @@ if (isset($_POST['class_id'])) {
 
     } else {
 
-        // ======================
+       
         // FETCH STUDENTS IN CLASS
-        // ======================
+        
 
         $getStudents = $connect->prepare("
             SELECT id, first_name, last_name, admission_number, class_id

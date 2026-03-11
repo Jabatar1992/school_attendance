@@ -9,18 +9,18 @@ if (isset($_POST['student_id'])) {
 
     $student_id = cleanme(trim($_POST['student_id']));
 
-    // ======================
+   
     // VALIDATION
-    // ======================
+  
     if (input_is_invalid($student_id)) {
         respondBadRequest("Student ID is required.");
     } else if (!is_numeric($student_id)) {
         respondBadRequest("Student ID must be a number.");
     } else {
 
-        // ======================
+        
         // FETCH ATTENDANCE HISTORY
-        // ======================
+     
         $query = "
             SELECT id, student_id, class_id, attendance_date, status, created_at
             FROM attendances

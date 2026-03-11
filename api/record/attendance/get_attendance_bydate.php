@@ -11,9 +11,9 @@ if (isset($_POST['class_id'], $_POST['start_date'], $_POST['end_date'])) {
     $start_date = cleanme(trim($_POST['start_date']));
     $end_date   = cleanme(trim($_POST['end_date']));
 
-    // ======================
+   
     // VALIDATION
-    // ======================
+   
     if (input_is_invalid($class_id) || input_is_invalid($start_date) || input_is_invalid($end_date)) {
         respondBadRequest("Class ID, Start Date and End Date are required.");
     } else if (!is_numeric($class_id)) {
@@ -25,9 +25,9 @@ if (isset($_POST['class_id'], $_POST['start_date'], $_POST['end_date'])) {
         respondBadRequest("Start date cannot be after end date.");
     } else {
 
-        // ======================
+       
         // FETCH ATTENDANCE FOR RANGE
-        // ======================
+       
         $query = "
             SELECT a.id, a.student_id, s.first_name, s.last_name, 
                    a.class_id, a.attendance_date, a.status, a.created_at

@@ -9,18 +9,18 @@ if (isset($_POST['attendance_id'])) {
 
     $attendance_id = cleanme(trim($_POST['attendance_id']));
 
-    // ======================
+   
     // VALIDATION
-    // ======================
+    
     if (input_is_invalid($attendance_id)) {
         respondBadRequest("Attendance ID is required.");
     } else if (!is_numeric($attendance_id)) {
         respondBadRequest("Attendance ID must be a number.");
     } else {
 
-        // ======================
+      
         // CHECK IF ATTENDANCE EXISTS
-        // ======================
+       
         $checkAttendance = $connect->prepare("
             SELECT id FROM attendances
             WHERE id = ?
@@ -33,9 +33,9 @@ if (isset($_POST['attendance_id'])) {
             respondBadRequest("Attendance record not found.");
         } else {
 
-            // ======================
+           
             // DELETE ATTENDANCE
-            // ======================
+          
             $deleteAttendance = $connect->prepare("
                 DELETE FROM attendances
                 WHERE id = ?

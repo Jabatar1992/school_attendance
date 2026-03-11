@@ -11,9 +11,9 @@ if (isset($_POST['class_name'])) {
                      ? cleanme(trim($_POST['class_teacher']))
                      : null;
 
-    // ======================
+    
     // VALIDATION
-    // ======================
+    
 
     if (input_is_invalid($class_name)) {
 

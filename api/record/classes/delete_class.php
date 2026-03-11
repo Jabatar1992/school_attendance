@@ -8,9 +8,9 @@ if (isset($_POST['class_id'])) {
 
     $class_id = cleanme(trim($_POST['class_id']));
 
-    // ======================
+   
     // VALIDATION
-    // ======================
+   
 
     if (input_is_invalid($class_id)) {
 
@@ -22,9 +22,9 @@ if (isset($_POST['class_id'])) {
 
     } else {
 
-        // ======================
+       
         // CHECK IF CLASS EXISTS
-        // ======================
+       
 
         $checkClass = $connect->prepare(
             "SELECT id, class_name FROM classes WHERE id = ?"
@@ -42,9 +42,9 @@ if (isset($_POST['class_id'])) {
 
         $class = $result->fetch_assoc();
 
-        // ======================
+        
         // DELETE CLASS
-        // ======================
+      
 
         $deleteClass = $connect->prepare(
             "DELETE FROM classes WHERE id = ?"

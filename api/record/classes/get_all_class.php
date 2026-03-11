@@ -4,9 +4,9 @@ $method = "GET";
 $cache  = "no-cache";
 include "../../head.php";
 
-// ======================
+
 // FETCH ALL CLASSES
-// ======================
+
 
 $getClasses = $connect->prepare("
     SELECT id, class_name, class_teacher, created_at

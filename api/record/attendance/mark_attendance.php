@@ -12,9 +12,9 @@ if (isset($_POST['student_id'], $_POST['class_id'], $_POST['attendance_date'], $
     $attendance_date = cleanme(trim($_POST['attendance_date']));
     $status          = cleanme(trim($_POST['status']));
 
-    // ======================
+    
     // VALIDATION
-    // ======================
+   
     if (
         input_is_invalid($student_id) ||
         input_is_invalid($class_id) ||
@@ -32,9 +32,9 @@ if (isset($_POST['student_id'], $_POST['class_id'], $_POST['attendance_date'], $
         respondBadRequest("Invalid attendance status.");
     } else {
 
-        // ======================
+        
         // CHECK IF ATTENDANCE ALREADY EXISTS
-        // ======================
+      
        
     $checkAttendance = $connect->prepare("
     
@@ -64,9 +64,9 @@ if (isset($_POST['student_id'], $_POST['class_id'], $_POST['attendance_date'], $
             respondBadRequest("Attendance already marked for this student on this date.");
         } else {
 
-            // ======================
+           
             // INSERT ATTENDANCE
-            // ======================
+        
             $insertAttendance = $connect->prepare("
                 INSERT INTO attendances (student_id, class_id, attendance_date, status)
                 VALUES (?, ?, ?, ?)
